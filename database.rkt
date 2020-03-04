@@ -3,10 +3,15 @@
          "traffic.rkt")
 (provide (all-defined-out))
 
+;; sudo -u postgres psql
+;; postgres=# create database traffic;
+;; postgres=# create user traffic_user with encrypted password ' ';
+;; postgres=# grant all privileges on database traffic to traffic_user;
+
 (define pgc
-  (postgresql-connect #:user     "postgres"
+  (postgresql-connect #:user     "traffic_user"
                       #:database "traffic"
-                      #:password ""))
+                      #:password " "))
 
 (define (insert-data x)
   (unless (query-maybe-value pgc
@@ -171,4 +176,6 @@ on data.report_id = meta.report_id
     (auto-fill-metadata-from)
     (sleep 100)
     (loop)))
-(define t (thread auto-update))
+
+(define (run-db)
+  (thread auto-update))
