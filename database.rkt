@@ -8,10 +8,20 @@
 ;; postgres=# create user traffic_user with encrypted password ' ';
 ;; postgres=# grant all privileges on database traffic to traffic_user;
 
+;; Currently does not work...
+(define (setup-postgres-db postgres-password)
+  (define admin-pgc (postgresql-connect #:user     "postgres"
+                                        #:password postgres-password))
+  (query-exec admin-pgc "create database traffic")
+  (query-exec admin-pgc "create user traffic_user with encrypted password ' '")
+  (query-exec admin-pgc "grant all privileges on database traffic to traffic_user")
+  (disconnect admin-pgc))
+
 (define pgc
-  (postgresql-connect #:user     "traffic_user"
-                      #:database "traffic"
-                      #:password " "))
+  (with-handlers ([exn:fail:sql? (lambda (e) (setup-postgres-db " "))])
+    (postgresql-connect #:user     "traffic_user"
+                        #:database "traffic"
+                        #:password " ")))
 
 (define (insert-data x)
   (unless (query-maybe-value pgc
