@@ -3,4 +3,6 @@
 #+DATE: 2019-04-19
 #+OPTIONS: toc:nil title:nil author:nil email:nil date:nil creator:nil
 * racket-data-analysis
+This has been merged into [[https://github.com/sstoltze/racket-playground][racket-playground]].
+
 A small repository for playing around with Racket and analysing/displaying data. Currently it only covers traffic data, and requires a bit of manual setup to get the database working. This might be expanded in the future.
